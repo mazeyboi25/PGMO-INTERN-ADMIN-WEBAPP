@@ -1,0 +1,16 @@
+-- PGMO full student delete cleanup support.
+-- Main patch is included in:
+-- admin-integration/database/supabase_secure_invite_registration.sql
+--
+-- After running the updated SQL, deleting a student from the admin panel removes:
+-- student_accounts
+-- ojt_uploads
+-- ojt_dtr_forms
+-- ojt_notifications
+-- ojt_id_requests
+-- registration_invites tied by account, student_id, or email
+--
+-- Uploaded storage files are removed from the "ojt-documents" bucket by the admin JavaScript before the database rows are deleted.
+--
+-- Required function added by the patch:
+-- public.admin_delete_student_account(uuid, text)

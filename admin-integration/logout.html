@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logging out | InternTrack</title>
+<link rel="stylesheet" href="assets/css/style.css?v=login-student-gradient-buttons-20260703">
+</head>
+<body class="logout-body" data-page="logout">
+<div class="logout-box">
+    <div class="spinner"></div>
+    <h2>Logging out...</h2>
+    <p>Please wait.</p>
+</div>
+<script src="assets/js/config.local.js"></script>
+<script src="assets/js/admin-auth.js?v=admin-polish-v2"></script>
+<script>
+clearAdminSession();
+setTimeout(() => {
+    window.location.href = "login.html";
+}, 900);
+</script>
+</body>
+</html>

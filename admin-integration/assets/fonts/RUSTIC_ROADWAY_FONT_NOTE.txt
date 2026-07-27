@@ -1,0 +1,2 @@
+Place RusticRoadway.otf in this folder to use the Rustic Roadway font for the certificate student name.
+Expected path: admin-integration/assets/fonts/RusticRoadway.otf

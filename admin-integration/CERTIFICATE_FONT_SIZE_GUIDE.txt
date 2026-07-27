@@ -1,0 +1,53 @@
+CERTIFICATE FONT SIZE GUIDE
+
+Edit this file:
+assets/js/certificate-final-kaluna-text.js
+
+Find this block:
+PGMO_CERTIFICATE_FONT_SIZES
+
+Fields you can edit:
+- studentName.baseSize: font size of the student name in Kaluna Script.
+- course.baseSize: course line font size.
+- school.baseSize: school line font size.
+- training.baseSize: training/hours line font size.
+- dates.baseSize: training date line font size.
+- office.baseSize: office line font size.
+- given.baseSize: date-issued sentence font size.
+- location.baseSize and country.baseSize: location lines font size.
+
+For long text:
+- minSize = smallest allowed size.
+- maxCharsBeforeShrink = text starts shrinking after this many characters.
+
+Student name underline:
+Edit this file:
+assets/css/style.css
+
+Find this block near the bottom:
+PGMO CERTIFICATE SAMPLE-MATCH PATCH 2026-07-02
+
+Then edit:
+.liceo-cert-template .cert-name-underline
+
+Common edits:
+- width controls underline length.
+- top controls vertical position.
+- border-top controls thickness.
+
+Do not add hidden or invisible buttons for certificate changes.
+
+PDF LEFT-CROP FIX NOTE:
+The downloaded PDF is exported from an off-screen fixed-size clone so the certificate text stays centered.
+Do not remove the function named htmlToPdf in:
+admin-integration/assets/js/certificate-final-kaluna-text.js
+
+The main font sizes are still edited in the PGMO_CERTIFICATE_FONT_SIZES block in that same file.
+
+
+Editable certificate fields in admin Certificates modal:
+- Student name
+- Course
+- School name
+- Office name
+- Pronoun

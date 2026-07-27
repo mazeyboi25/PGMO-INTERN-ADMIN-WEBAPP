@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registration Access | InternTrack Admin</title>
+<link rel="icon" type="image/png" href="assets/img/adminlogo.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=login-student-gradient-buttons-20260703">
+</head>
+<body data-page="secure-registration">
+<aside class="sidebar">
+    <div class="brand brand-vertical">
+        <img src="assets/img/pgmoseal1.png" alt="PGMO Seal">
+        <strong>Intern<span>Track</span></strong>
+    </div>
+    <a class="" href="index.html"><i class="fa fa-house"></i> Dashboard</a>
+    <a class="" href="students.html"><i class="fa fa-user-graduate"></i> Students</a>
+    <a class="active" href="secure-registration.html"><i class="fa fa-key"></i> Registration Access</a>
+    <a class="" href="dtr.html"><i class="fa fa-calendar-days"></i> DTR Logs</a>
+    <a class="" href="id-requests.html"><i class="fa fa-id-card"></i> OJT ID Requests</a>
+    <a class="" href="documents.html"><i class="fa fa-folder-open"></i> Documents</a>
+    <a class="" href="certificates.html"><i class="fa fa-award"></i> Certificates</a>
+    <a class="" href="reports.html"><i class="fa fa-chart-column"></i> Reports</a>
+    <a href="activity-log.html"><i class="fa fa-clock-rotate-left"></i> Activity Log</a>
+    <a href="backup.html"><i class="fa fa-database"></i> Backup / Export</a>
+    <a class="logout-link" href="logout.html"><i class="fa fa-right-from-bracket"></i> Logout</a>
+</aside>
+
+<main class="main">
+    <div class="topbar">
+        <div class="topbar-title">Registration Access</div>
+        <div class="admin-chip">
+            <div class="avatar">A</div>
+            <div><strong id="currentUser">admin</strong><br><small>OJT Coordinator</small></div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="page-head">
+            <div>
+                <h1>Secure Student Registration</h1>
+                <p>Generate one-time registration codes for approved students only.</p>
+            </div>
+            <button class="btn btn-outline-secondary" onclick="loadRegistrationInvitesAdmin()"><i class="fa fa-rotate"></i> Refresh Invites</button>
+        </div>
+
+        <div class="card-panel p-4 registration-invite-panel">
+            <div class="page-head compact-head">
+                <div>
+                    <h2>Generate One Registration Code</h2>
+                    <p>Use the student's last name as the only registration identifier.</p>
+                </div>
+            </div>
+
+            <div class="single-invite-grid single-invite-grid-choice last-name-only-invite">
+                <div>
+                    <label class="form-label fw-bold" for="singleInviteValue">Student Last Name</label>
+                    <div class="last-name-code-input">
+                        <i class="fa fa-user-check"></i>
+                        <input id="singleInviteValue" class="form-control" placeholder="ex: SANTOS" autocomplete="family-name">
+                    </div>
+                    <small id="singleInviteHelp" class="text-secondary">Enter only the student's last name. The generated code will not show the last name.</small>
+                </div>
+            </div>
+
+            <div class="single-invite-actions">
+                <button class="btn btn-success" onclick="createSingleRegistrationInvite()">
+                    <i class="fa fa-key"></i> Generate One Code
+                </button>
+            </div>
+
+            <div class="secure-register-note-admin mt-3">
+                <i class="fa fa-shield-halved"></i>
+                <span>Generate only one code per student. The code is shown once, can be used once, and should be given only to the approved student.</span>
+            </div>
+
+            <div class="mt-4">
+                <label class="form-label fw-bold">Generated code and secure register link</label>
+                <div id="inviteGeneratedOutput" class="invite-output-card invite-output-empty" data-copy-text="">
+                    <p>The generated code and secure registration link will appear here after you click Generate One Code.</p>
+                </div>
+                <small class="text-danger fw-semibold">Important: copy the code/link before leaving this page. Supabase stores only the hashed code.</small>
+                <div class="mt-3">
+                    <button class="btn btn-outline-dark" onclick="copyGeneratedInviteCodes()"><i class="fa fa-copy"></i> Copy Code / Link</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-panel p-4 mt-4 registration-invite-panel">
+            <div class="page-head compact-head">
+                <div>
+                    <h2>Registration Invite List</h2>
+                    <p>Monitor unused, used, expired, revoked registration access, and which account used a code.</p>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Last Name Verification</th>
+                            <th>Email</th>
+                            <th>Course / Office</th>
+                            <th>Status</th>
+                            <th>Attempts</th>
+                            <th>Expires</th>
+                            <th>Used By</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="registrationInvitesTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/config.local.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/admin-auth.js?v=lastname-only-registration-v4"></script>
+<script src="assets/js/script.js?v=deploy-clean-20260702"></script>
+<script src="assets/js/admin-improvements.js?v=open-original-new-tab-20260724a"></script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documents | InternTrack Admin</title>
+    <link rel="icon" type="image/png" href="assets/img/adminlogo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css?v=lacking-report-status-groups-20260727">
+    </head>
+    <body data-page="documents">
+    <aside class="sidebar">
+        <div class="brand brand-vertical">
+        <img src="assets/img/pgmoseal1.png" alt="PGMO Seal">
+        <strong>Intern<span>Track</span></strong>
+        </div>
+        <a class="" href="index.html"><i class="fa fa-house"></i> Dashboard</a>
+<a class="" href="students.html"><i class="fa fa-user-graduate"></i> Students</a>
+<a class="" href="secure-registration.html"><i class="fa fa-key"></i> Registration Access</a>
+<a class="" href="dtr.html"><i class="fa fa-calendar-days"></i> DTR Logs</a>
+    <a class="" href="id-requests.html"><i class="fa fa-id-card"></i> OJT ID Requests</a>
+<a class="active" href="documents.html"><i class="fa fa-folder-open"></i> Documents</a>
+<a class="" href="certificates.html"><i class="fa fa-award"></i> Certificates</a>
+<a class="" href="reports.html"><i class="fa fa-chart-column"></i> Reports</a>
+    <a href="activity-log.html"><i class="fa fa-clock-rotate-left"></i> Activity Log</a>
+    <a href="backup.html"><i class="fa fa-database"></i> Backup / Export</a>
+    <a class="logout-link" href="logout.html"><i class="fa fa-right-from-bracket"></i> Logout</a>
+    </aside>
+
+    <main class="main">
+        <div class="topbar">
+            <div class="topbar-title">Documents</div>
+            <div class="admin-chip">
+                <div class="avatar">A</div>
+                <div><strong id="currentUser">admin</strong><br><small>OJT Coordinator</small></div>
+            </div>
+        </div>
+        <section class="content"><div class="page-head">
+    <div><h1>Documents</h1><p>View, approve, return, or upload documents for a specific student.</p></div>
+    <div class="documents-head-actions">
+        <button class="btn btn-success" onclick="openAdminDocumentUploadModal()"><i class="fa fa-upload"></i> Upload for Student</button>
+        <button class="btn btn-primary" onclick="renderDocuments()"><i class="fa fa-rotate"></i> Refresh Uploads</button>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3"><div class="stat-card"><div class="stat-label">Total Files</div><div class="stat-number" id="docTotal">0</div></div></div>
+    <div class="col-md-3"><div class="stat-card"><div class="stat-label">Approved</div><div class="stat-number" id="docApproved">0</div></div></div>
+    <div class="col-md-3"><div class="stat-card"><div class="stat-label">Pending</div><div class="stat-number" id="docPending">0</div></div></div>
+    <div class="col-md-3"><div class="stat-card"><div class="stat-label">Returned</div><div class="stat-number" id="docReturned">0</div></div></div>
+</div>
+
+<div class="card-panel p-4 mb-4 admin-lacking-report-card">
+    <div class="admin-lacking-report-header mb-4">
+        <div class="admin-lacking-title-wrap">
+            <div class="admin-lacking-title-icon"><i class="fa fa-list-check"></i></div>
+            <div>
+                <h5 class="fw-bold mb-1">Lacking Requirements Report</h5>
+                <p class="text-secondary mb-0">Review ongoing and completed students who still have missing, pending, or returned requirements.</p>
+            </div>
+        </div>
+        <div class="action-group admin-lacking-primary-actions">
+            <button class="btn btn-success" type="button" onclick="renderLackingRequirementsReport()"><i class="fa fa-arrows-rotate"></i> Refresh Report</button>
+            <button id="downloadLackingRequirementsButton" class="btn btn-outline-dark" type="button" onclick="downloadLackingRequirementsReport()" disabled title="Refresh the report first"><i class="fa fa-file-excel"></i> Download Excel</button>
+        </div>
+    </div>
+
+    <div class="admin-lacking-metrics mb-4">
+        <div class="admin-lacking-metric-card neutral">
+            <div class="admin-lacking-metric-icon"><i class="fa fa-users"></i></div>
+            <div><span>Students Checked</span><strong id="lackingReportTotalStudents">0</strong></div>
+        </div>
+        <div class="admin-lacking-metric-card warning">
+            <div class="admin-lacking-metric-icon"><i class="fa fa-folder-open"></i></div>
+            <div><span>With Lacking Documents</span><strong id="lackingReportStudents">0</strong></div>
+        </div>
+        <div class="admin-lacking-metric-card ongoing">
+            <div class="admin-lacking-metric-icon"><i class="fa fa-hourglass-half"></i></div>
+            <div><span>Ongoing With Lacking</span><strong id="lackingReportOngoingStudents">0</strong></div>
+        </div>
+        <div class="admin-lacking-metric-card completed">
+            <div class="admin-lacking-metric-icon"><i class="fa fa-flag-checkered"></i></div>
+            <div><span>Completed With Lacking</span><strong id="lackingReportCompletedStudents">0</strong></div>
+        </div>
+        <div class="admin-lacking-metric-card danger">
+            <div class="admin-lacking-metric-icon"><i class="fa fa-file-circle-exclamation"></i></div>
+            <div><span>Lacking Items Shown</span><strong id="lackingReportItems">0</strong></div>
+        </div>
+    </div>
+
+    <div class="admin-lacking-filter-panel mb-3">
+        <div class="admin-lacking-filter-heading">
+            <div>
+                <strong><i class="fa fa-sliders"></i> Find students</strong>
+                <span>Use the search and status options to narrow the list.</span>
+            </div>
+            <button class="btn btn-sm btn-link admin-lacking-reset-button" type="button" onclick="resetLackingReportFilters()"><i class="fa fa-rotate-left"></i> Reset</button>
+        </div>
+        <div class="admin-lacking-toolbar">
+            <label class="admin-lacking-filter-field admin-lacking-search-field">
+                <span>Search</span>
+                <div class="admin-lacking-input-wrap"><i class="fa fa-magnifying-glass"></i><input id="lackingReportSearch" class="form-control" placeholder="Name, school, course, office, or document" oninput="renderLackingRequirementsReport()"></div>
+            </label>
+            <label class="admin-lacking-filter-field">
+                <span>Student Status</span>
+                <select id="lackingReportStatusFilter" class="form-select" onchange="renderLackingRequirementsReport()">
+                    <option value="All">All Statuses</option>
+                    <option value="Ongoing">Ongoing Students</option>
+                    <option value="Completed">Completed Students</option>
+                </select>
+            </label>
+            <label class="admin-lacking-filter-field">
+                <span>Office</span>
+                <select id="lackingReportOfficeFilter" class="form-select" onchange="renderLackingRequirementsReport()">
+                    <option value="All">All Offices</option>
+                </select>
+            </label>
+        </div>
+    </div>
+
+    <div class="admin-lacking-selection-toolbar mb-3">
+        <div class="admin-lacking-selection-copy">
+            <i class="fa fa-square-check"></i>
+            <div><strong>Choose students for Excel</strong><span>Check one or more students to export only them. Leave every checkbox empty to export all students currently shown.</span></div>
+        </div>
+        <div class="admin-lacking-selection-actions">
+            <button class="btn btn-sm btn-outline-success" type="button" onclick="setLackingReportVisibleSelection(true)"><i class="fa fa-check-double"></i> Select Shown</button>
+            <button class="btn btn-sm btn-outline-secondary" type="button" onclick="setLackingReportVisibleSelection(false)"><i class="fa fa-xmark"></i> Clear Shown</button>
+        </div>
+        <div id="lackingReportSelectionCount" class="admin-lacking-selection-count">0 selected · all shown students will be included</div>
+    </div>
+
+    <div class="table-responsive admin-lacking-table-wrap">
+        <table class="table table-hover align-middle admin-lacking-report-table">
+            <thead>
+                <tr>
+                    <th class="admin-lacking-select-column">
+                        <input id="lackingReportSelectAll" class="form-check-input" type="checkbox" disabled aria-label="Select all students shown" onchange="setLackingReportVisibleSelection(this.checked)">
+                    </th>
+                    <th>Student</th>
+                    <th>Status</th>
+                    <th>School / Course</th>
+                    <th>Office</th>
+                    <th>Lacking Requirements</th>
+                    <th class="text-center">Count</th>
+                </tr>
+            </thead>
+            <tbody id="lackingRequirementsReportBody">
+                <tr><td colspan="7"><div class="empty-state compact"><i class="fa fa-list-check"></i><h5>Load the lacking requirements report</h5><p>Click Refresh Report to check each student's requirement status.</p></div></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card-panel p-4">
+    <div class="toolbar">
+        <input id="documentSearch" onkeyup="renderDocuments()" class="form-control" placeholder="Search documents...">
+        <select id="documentStatus" onchange="renderDocuments()" class="form-select"><option>All</option><option>Pending</option><option>Approved</option><option>Returned</option></select>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead><tr><th>Student</th><th>Document</th><th>Type</th><th>Status</th><th>Uploaded</th><th>Action</th></tr></thead>
+            <tbody id="documentsTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="documentModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content admin-upload-document-modal">
+            <div class="modal-header">
+                <div>
+                    <h5 class="mb-1"><i class="fa fa-upload text-success"></i> Upload Document for Student</h5>
+                    <small class="text-secondary">Select a registered student, choose the requirement type, then upload the file.</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="documentForm">
+                    <div class="admin-document-upload-grid">
+                        <div class="field-span-2">
+                            <label class="form-label fw-bold">Student</label>
+                            <div class="admin-student-combo" id="documentStudentCombo">
+                                <div class="admin-student-combo-input-wrap">
+                                    <i class="fa fa-magnifying-glass"></i>
+                                    <input id="documentStudentComboInput" class="form-control" type="text" placeholder="Type student name..." autocomplete="off" oninput="filterAdminDocumentStudentCombo()" onfocus="openAdminDocumentStudentCombo()">
+                                    <button class="admin-student-combo-toggle" type="button" onclick="toggleAdminDocumentStudentCombo()" aria-label="Show students">
+                                        <i class="fa fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                                <input id="documentStudentSelect" type="hidden" value="">
+                                <div id="documentStudentComboList" class="admin-student-combo-list">
+                                    <div class="admin-student-combo-empty">Loading students...</div>
+                                </div>
+                            </div>
+                            <div id="documentSelectedStudentHint" class="selected-student-hint mt-2">Choose a student to upload a document under their account.</div>
+                        </div>
+
+                        <div>
+                            <label class="form-label fw-bold">Document Type</label>
+                            <select id="documentType" class="form-select">
+                                <optgroup label="Pre-Deployment Requirements">
+                                    <option>Endorsement from School</option>
+                                    <option>Application Letter</option>
+                                    <option>Certificate of Registration/Enrollment</option>
+                                    <option>Biodata/Resume</option>
+                                    <option>Medical Certificate</option>
+                                    <option>Parent/Guardian Waiver</option>
+                                    <option>Police Clearance</option>
+                                    <option>MOA/MOU</option>
+                                </optgroup>
+                                <optgroup label="Post-Deployment Requirements">
+                                    <option>Endorsement Letter from Hosting Office</option>
+                                    <option>Daily Time Record (DTR)</option>
+                                    <option>School Performance Evaluation Form</option>
+                                    <option>Accomplishment Report</option>
+                                    <option>Certificate of Completion</option>
+                                    <option>OJT Feedback Form</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="form-label fw-bold">Status</label>
+                            <select id="documentUploadStatus" class="form-select">
+                                <option value="Approved" selected>Approved</option>
+                                <option value="Pending">Pending</option>
+                            </select>
+                            <small class="text-secondary">Admin uploads are approved by default.</small>
+                        </div>
+
+                        <div class="field-span-2">
+                            <label class="form-label fw-bold">Choose File</label>
+                            <input id="documentFile" type="file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                            <small class="text-secondary">Accepted: PDF, DOC, DOCX, JPG, JPEG, PNG.</small>
+                        </div>
+
+                        <div class="field-span-2">
+                            <label class="form-label fw-bold">Admin Remarks</label>
+                            <textarea id="documentAdminRemarks" class="form-control" rows="3" placeholder="Optional note shown with this document record."></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button id="adminDocumentUploadButton" class="btn btn-success" onclick="adminUploadStudentDocument()">
+                    <i class="fa fa-cloud-arrow-up"></i> Upload for Student
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="documentPreviewModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><h5>Document Preview</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+            <div class="modal-body text-center"><i class="fa fa-file-lines fa-4x text-primary mb-3"></i><h5 id="documentPreviewName">Document</h5><p class="text-secondary">Static preview placeholder.</p></div>
+        </div>
+    </div>
+</div></section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+    <script src="assets/js/config.local.js"></script>
+<script src="assets/js/supabase-config.js"></script>
+    <script src="assets/js/admin-auth.js?v=admin-doc-search-select-v1"></script>
+<script src="assets/js/script.js?v=centered-reviewed-signature-20260727"></script>
+    <script src="assets/js/admin-improvements.js?v=open-original-new-tab-20260724a"></script>
+</body>
+    </html>
